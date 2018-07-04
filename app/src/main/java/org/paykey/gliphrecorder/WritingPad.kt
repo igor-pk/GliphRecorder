@@ -23,7 +23,7 @@ class WritingPad : View {
     @JvmOverloads
     constructor(context: Context?, attrs: AttributeSet? = null, defStyleAttr: Int = 0, defStyleRes: Int = 0) : super(context, attrs, defStyleAttr, defStyleRes) {
         paint.apply {
-            strokeWidth = 5f
+            strokeWidth = 8f
             isAntiAlias = true
             isDither = true
             color = Color.BLACK

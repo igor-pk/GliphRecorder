@@ -13,10 +13,11 @@ import android.widget.Toast
 import com.google.android.flexbox.FlexboxLayout
 import com.google.gson.Gson
 import java.io.File
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val wordList: ArrayList<Word> = ArrayList()
+    private val wordList: LinkedList<Word> = LinkedList()
     private val gson = Gson()
 
     @SuppressLint("ClickableViewAccessibility")
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         val testName = findViewById<EditText>(R.id.testName)
         val writingPad = findViewById<WritingPad>(R.id.writingPad)
-        writingPad.setOnTouchListener { v, event ->
+        writingPad.setOnTouchListener { _, _ ->
             testName.clearFocus()
             false
         }
@@ -51,10 +52,27 @@ class MainActivity : AppCompatActivity() {
                         (writingPad.height * 0.1).toInt())
                 container.addView(pathView, layoutParams)
             }
+
+            setOnLongClickListener {
+                wordList.removeLast()
+                container.removeViewAt(container.childCount - 1)
+                true
+            }
+        }
+
+
+        findViewById<Button>(R.id.clear).apply {
+            setOnClickListener {
+                writingPad.clear()
+            }
         }
 
         findViewById<Button>(R.id.done).apply {
             setOnClickListener {
+                if (wordList.isEmpty()) {
+                    Toast.makeText(context, "No words recorded", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
                 val name = testName.text?.toString()
                 if (name.isNullOrEmpty()) {
                     Toast.makeText(context, "Enter test name", Toast.LENGTH_SHORT).show()
